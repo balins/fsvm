@@ -3,16 +3,16 @@
 Plotting Template Classifier
 ============================
 
-An example plot of :class:`fsvm.template.TemplateClassifier`
+An example plot of :class:`fsvm.FuzzySVC`
 """
 
 # %%
 # Train our classifier on very simple dataset
-from fsvm import TemplateClassifier
+from fsvm import FuzzySVC
 
 X = [[0, 0], [1, 1]]
 y = [0, 1]
-clf = TemplateClassifier().fit(X, y)
+clf = FuzzySVC().fit(X, y)
 
 # %%
 # Create a test dataset
@@ -37,5 +37,5 @@ disp.ax_.scatter(
 disp.ax_.set(
     xlabel="Feature 1",
     ylabel="Feature 2",
-    title="Template Classifier Decision Boundary",
+    title="FSVM Classifier Decision Boundary",
 )

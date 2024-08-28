@@ -1,7 +1,4 @@
-"""This file shows how to write test based on the scikit-learn common tests."""
-
-# Authors: scikit-learn-contrib developers
-# License: BSD 3 clause
+"""This file tests the compatibility of the estimators with scikit-learn API."""
 
 from sklearn.utils.estimator_checks import parametrize_with_checks
 

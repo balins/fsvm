@@ -54,7 +54,7 @@ ruff = "0.4.2"
 black = { cmd = "black --check --diff fsvm && black --check --diff examples" }
 ruff = { cmd = "ruff check --output-format=full fsvm && ruff check --output-format=full examples" }
 lint = { depends_on = ["black", "ruff"] }
-format = { cmd = "ruff check --fix --unsafe-fixes && ruff format" }
+format = { cmd = "ruff format && ruff check --fix --unsafe-fixes" }
 
 [tool.pixi.feature.test.dependencies]
 pytest = "*"

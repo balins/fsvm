@@ -1,12 +1,7 @@
-# Authors: scikit-learn-contrib developers
-# License: BSD 3 clause
-
-from ._template import TemplateClassifier, TemplateEstimator, TemplateTransformer
+from ._fuzzy_svc import FuzzySVC
 from ._version import __version__
 
 __all__ = [
-    "TemplateEstimator",
-    "TemplateClassifier",
-    "TemplateTransformer",
+    "FuzzySVC",
     "__version__",
 ]
