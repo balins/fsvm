@@ -1,0 +1,6 @@
+﻿fsvm.utils.discovery.all\_estimators
+====================================
+
+.. currentmodule:: fsvm.utils.discovery
+
+.. autofunction:: all_estimators

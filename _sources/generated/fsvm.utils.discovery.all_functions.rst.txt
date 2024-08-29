@@ -1,0 +1,6 @@
+﻿fsvm.utils.discovery.all\_functions
+===================================
+
+.. currentmodule:: fsvm.utils.discovery
+
+.. autofunction:: all_functions
