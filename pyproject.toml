@@ -77,11 +77,14 @@ sphinx-prompt = "*"
 build-doc = { cmd = "make html", cwd = "doc" }
 clean-doc = { cmd = "rm -rf _build", cwd = "doc" }
 
+[tool.pixi.feature.jupyter.dependencies]
+ipykernel = ">=6.29.5,<7"
+
 [tool.pixi.environments]
 doc = ["doc"]
 lint = ["lint"]
 test = ["test"]
-dev = ["doc", "lint", "test"]
+dev = ["doc", "lint", "test", "jupyter"]
 
 [tool.black]
 line-length = 88
