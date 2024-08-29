@@ -17,7 +17,7 @@ def test_fuzzy_svc(data):
     clf = FuzzySVC()
     assert clf.distance_metric == "centroid"
     assert clf.membership_decay == "exponential"
-    assert clf.beta == 0.5
+    assert clf.beta == 0.1
     assert clf.balanced is True
 
     clf.fit(X, y)
