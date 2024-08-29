@@ -2,10 +2,15 @@
 This is a module defining a fuzzy support vector machine classifier.
 """
 
+from numbers import Real
+
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, _fit_context, check_is_fitted
+from sklearn.neighbors import (
+    NearestCentroid as _NearestCentroid,
+)
 from sklearn.svm import SVC as _SVC
-from sklearn.utils._param_validation import StrOptions
+from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import column_or_1d
 
@@ -15,20 +20,32 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
 
     Parameters
     ----------
-    membership_base : {'distance_to_class_center', 'distance_to_hyperplane'}   \
-        or callable, default='distance_to_class_center'
-        Method to compute the base for membership degree of training samples.
+    distance_metric : {'centroid', 'hyperplane'} or callable,                  \
+        default='centroid'
+        Method to compute the distance of a sample to the expected value,
+        which will be the base for calculating the membership degree.
         The membership decay function will be then applied to its output
-        to compute the actual membership degree value. If a callable is
-        passed, it should take the input data `X` and return the membership
-        degree values. For more information, see [1]_.
+        to compute the actual membership degree value. For 'centroid', the fuzzy
+        membership is calculated based on the distance of the sample to the
+        centroid of its class. For 'hyperplane', the membership is calculated
+        based on the distance of the sample to the hyperplane of a pre-trained
+        SVM classifier. If a callable is passed, it should take the input data
+        `X` and return values of a custom metric for membership base, eg. the
+        duration since a sample was collected. Notice that the membership degree
+        of samples with larger values of `distance_metric` values will be lower.
+        For more information, see [1]_.
 
     membership_decay : {'exponential', 'linear'} or callable,                  \
         default='exponential'
         Method to compute the decay function for membership. If a callable is
-        passed, it should take the output of `membership_base` method and
-        return the final membership degree. Ignored if `membership_base` is a
-        callable. For more information, see [1]_.
+        passed, it should take the output of `distance_metric` method and
+        return the final membership degree in range [0, 1].
+        For more information, see [1]_.
+
+    beta : float, default=1.0
+        Parameter for the exponential decay function. Must be strictly positive.
+        The higher the value, the faster the membership degree will decrease
+        with the distance. For more information, see [1]_.
 
     balanced : bool, default=True
         Set the parameter C of class i to r_i*C for FuzzySVC. If True, the
@@ -111,6 +128,14 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
 
     Attributes
     ----------
+    distance_: ndarray of shape (n_samples,)
+        Calculated distance of each sample to the expected value according to
+        the `distance_metric` parameter.
+
+    membership_degree_: ndarray of shape (n_samples,)
+        Calculated membership degree of each sample according to the their
+        `distance_metric` and `membership_decay`.
+
     class_weight_ : ndarray of shape (n_classes,)
         Multipliers of parameter C for each class.
         Computed based on the proportion of classes to the majority class.
@@ -196,16 +221,17 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
            0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2,
-           2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+           2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2,
            2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
     """
 
     _parameter_constraints = {
-        "membership_base": [
-            StrOptions({"distance_to_class_center", "distance_to_hyperplane"}),
+        "distance_metric": [
+            StrOptions({"centroid", "hyperplane"}),
             callable,
         ],
         "membership_decay": [StrOptions({"exponential", "linear"}), callable],
+        "beta": [Interval(Real, 0.0, None, closed="neither")],
         "balanced": ["boolean"],
         **_SVC._parameter_constraints,
     }
@@ -216,8 +242,9 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
     def __init__(
         self,
         *,
-        membership_base="distance_to_class_center",
+        distance_metric="centroid",
         membership_decay="exponential",
+        beta=1.0,
         balanced=True,
         C=1.0,
         kernel="rbf",
@@ -234,8 +261,9 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         break_ties=False,
         random_state=None,
     ):
-        self.membership_base = membership_base
+        self.distance_metric = distance_metric
         self.membership_decay = membership_decay
+        self.beta = beta
         self.balanced = balanced
         self.C = C
         self.kernel = kernel
@@ -289,37 +317,38 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
 
         y_ = column_or_1d(y, warn=True)
         classes, y_, counts = np.unique(y, return_inverse=True, return_counts=True)
-        self.classes_ = classes
+        class_imbalance = self.__calculate_class_imbalance(y, classes, counts)
 
-        if self.balanced:
-            class_ratios = {}
-            majority_class_count = np.amax(counts)
+        svc_args = {
+            "C": self.C,
+            "kernel": self.kernel,
+            "degree": self.degree,
+            "gamma": self.gamma,
+            "coef0": self.coef0,
+            "shrinking": self.shrinking,
+            "probability": self.probability,
+            "tol": self.tol,
+            "cache_size": self.cache_size,
+            "class_weight": class_imbalance,
+            "verbose": self.verbose,
+            "max_iter": self.max_iter,
+            "decision_function_shape": self.decision_function_shape,
+            "break_ties": self.break_ties,
+            "random_state": self.random_state,
+        }
 
-            for class_label in set(y):
-                idx = np.where(classes == class_label)[0][0]
+        if self.distance_metric == "centroid":
+            centroids = _NearestCentroid().fit(X, y).centroids_
+            self.distance_ = np.linalg.norm(X - centroids[y_], axis=1)
+        elif self.distance_metric == "hyperplane":
+            svc = _SVC(**svc_args).fit(X, y)
+            self.distance_ = np.abs(svc.decision_function(X))
+        elif callable(self.distance_metric):
+            self.distance_ = self.distance_metric(X)
 
-                class_ratios[class_label] = counts[idx] / majority_class_count
+        self.membership_degree_ = self.__calculate_membership_degree()
 
-        # TODO: Implement the membership base and decay functions
-        sample_weight = None
-
-        self.svc_ = _SVC(
-            C=self.C,
-            kernel=self.kernel,
-            degree=self.degree,
-            gamma=self.gamma,
-            coef0=self.coef0,
-            shrinking=self.shrinking,
-            probability=self.probability,
-            tol=self.tol,
-            cache_size=self.cache_size,
-            class_weight=class_ratios if self.balanced else None,
-            verbose=self.verbose,
-            max_iter=self.max_iter,
-            decision_function_shape=self.decision_function_shape,
-            break_ties=self.break_ties,
-            random_state=self.random_state,
-        ).fit(X, y, sample_weight=sample_weight)
+        self.svc_ = _SVC(**svc_args).fit(X, y, sample_weight=self.membership_degree_)
 
         self.class_weight_ = self.svc_.class_weight_
         self.classes_ = self.svc_.classes_
@@ -359,3 +388,33 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         X = self._validate_data(X, reset=False)
 
         return self.svc_.predict(X)
+
+    def __calculate_class_imbalance(self, y, classes, counts):
+        class_imbalance = None
+
+        if self.balanced:
+            class_imbalance = {}
+            majority_class_count = np.amax(counts)
+
+            for class_label in set(y):
+                idx = np.where(classes == class_label)[0][0]
+
+                class_imbalance[class_label] = counts[idx] / majority_class_count
+
+        return class_imbalance
+
+    def __calculate_membership_degree(self):
+        if self.membership_decay == "exponential":
+            membership = 2 / (1 + np.exp(self.beta * self.distance_))
+        elif self.membership_decay == "linear":
+            max_distance = np.amax(self.distance_)
+            delta = 0.01
+            membership = 1 - (self.distance_ / (max_distance + delta))
+        elif callable(self.membership_decay):
+            membership = self.membership_decay(self.distance_)
+            if not (membership >= 0) & (membership <= 1):
+                raise ValueError(
+                    "Membership decay function must return values in range [0, 1]."
+                )
+
+        return membership
