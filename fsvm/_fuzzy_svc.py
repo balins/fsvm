@@ -25,33 +25,43 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         Method to compute the distance of a sample to the expected value,
         which will be the base for calculating the membership degree.
         The membership decay function will be then applied to its output
-        to compute the actual membership degree value. For 'centroid', the fuzzy
-        membership is calculated based on the distance of the sample to the
-        centroid of its class. For 'hyperplane', the membership is calculated
+        to compute the actual membership degree value as in [1]_.
+
+        If `distance_metric='centroid'`, the fuzzy membership is calculated
+        based on the distance of the sample to the centroid of its class.
+        If `distance_metric='hyperplane'`, the fuzzy membership is calculated
         based on the distance of the sample to the hyperplane of a pre-trained
-        SVM classifier. If a callable is passed, it should take the input data
-        `X` and return values of a custom metric for membership base, eg. the
-        duration since a sample was collected. Notice that the membership degree
-        of samples with larger values of `distance_metric` values will be lower.
-        For more information, see [1]_.
+        SVM classifier.
+        If a callable is passed, it should take the input data `X` and return
+        values of a custom metric for membership base, eg. the duration since
+        a sample was collected. Notice that the membership degree of samples
+        with larger values of `distance_metric` values will be lower.
+
+    centroid_metric : {'euclidean', 'manhattan'}, default='euclidean'          \
+        Metric to use for the computation of distance between the sample
+        and the centroid of its class. This parameter is only used when
+        `distance_metric='centroid'`.
+
+        If `centroid_metric='euclidean'`, the centroid for the samples
+        corresponding to each class is the arithmetic mean, which minimizes
+        the sum of squared L1 distances.
+        If `centroid_metric='manhattan'`, the centroid is the feature-wise
+        median, which minimizes the sum of L1 distances.
 
     membership_decay : {'exponential', 'linear'} or callable,                  \
         default='exponential'
-        Method to compute the decay function for membership. If a callable is
-        passed, it should take the output of `distance_metric` method and
-        return the final membership degree in range [0, 1].
-        For more information, see [1]_.
+        Method to compute the decay function for membership as in [1]_.
+        If a callable is passed, it should take the output of `distance_metric`
+        method and return the final membership degree in the interval [0, 1].
 
-    beta : float, default=1.0
-        Parameter for the exponential decay function. Must be strictly positive.
-        The higher the value, the faster the membership degree will decrease
-        with the distance. For more information, see [1]_.
+    beta : float, default=0.5
+        Parameter for the exponential decay function, determining the steepness
+        of the decay as in [1]._ Should be in the interval [0, 1].
 
     balanced : bool, default=True
-        Set the parameter C of class i to r_i*C for FuzzySVC. If True, the
+        Set the parameter C of class i to r_i*C for FuzzySVC. If `True`, the
         membership of each sample will be scaled by the number r_i expressing
-        its ratio to the number of samples of the majority class.
-        For more information, see [1]_.
+        its ratio to the number of samples of the majority class as in [1]_.
 
     C : float, default=1.0
         Regularization parameter. The strength of the regularization is
@@ -137,9 +147,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         `distance_metric` and `membership_decay`.
 
     class_weight_ : ndarray of shape (n_classes,)
-        Multipliers of parameter C for each class.
-        Computed based on the proportion of classes to the majority class.
-        For more information, see [1]_.
+        Multipliers of parameter C for each class based on class imbalance.
 
     classes_ : ndarray of shape (n_classes,)
         The classes labels.
@@ -221,7 +229,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
            0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2,
-           2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2,
+           2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
            2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
     """
 
@@ -231,7 +239,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
             callable,
         ],
         "membership_decay": [StrOptions({"exponential", "linear"}), callable],
-        "beta": [Interval(Real, 0.0, None, closed="neither")],
+        "beta": [Interval(Real, 0.0, 1.0, closed="both")],
         "balanced": ["boolean"],
         **_SVC._parameter_constraints,
     }
@@ -244,7 +252,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         *,
         distance_metric="centroid",
         membership_decay="exponential",
-        beta=1.0,
+        beta=0.5,
         balanced=True,
         C=1.0,
         kernel="rbf",
@@ -408,7 +416,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
             membership = 2 / (1 + np.exp(self.beta * self.distance_))
         elif self.membership_decay == "linear":
             max_distance = np.amax(self.distance_)
-            delta = 0.01
+            delta = 1e-6
             membership = 1 - (self.distance_ / (max_distance + delta))
         elif callable(self.membership_decay):
             membership = self.membership_decay(self.distance_)
