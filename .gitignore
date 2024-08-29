@@ -76,3 +76,6 @@ target/
 
 # auto-generated files
 fsvm/_version.py
+
+# Visual Studio Code
+.vscode

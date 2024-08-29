@@ -7,6 +7,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, _fit_context, check_is_
 from sklearn.svm import SVC as _SVC
 from sklearn.utils._param_validation import StrOptions
 from sklearn.utils.multiclass import check_classification_targets
+from sklearn.utils.validation import column_or_1d
 
 
 class FuzzySVC(ClassifierMixin, BaseEstimator):
@@ -112,7 +113,8 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
     ----------
     class_weight_ : ndarray of shape (n_classes,)
         Multipliers of parameter C for each class.
-        Computed based on the ``class_weight`` parameter.
+        Computed based on the proportion of classes to the majority class.
+        For more information, see [1]_.
 
     classes_ : ndarray of shape (n_classes,)
         The classes labels.
@@ -282,14 +284,26 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         """
         X, y = self._validate_data(X, y)
         check_classification_targets(y)
-        self.classes_ = np.unique(y)
         self.X_ = X
         self.y_ = y
 
-        # TODO: Implement the class balanicng, membership base and decay functions
+        y_ = column_or_1d(y, warn=True)
+        classes, y_, counts = np.unique(y, return_inverse=True, return_counts=True)
+        self.classes_ = classes
+
+        if self.balanced:
+            class_ratios = {}
+            majority_class_count = np.amax(counts)
+
+            for class_label in set(y):
+                idx = np.where(classes == class_label)[0][0]
+
+                class_ratios[class_label] = counts[idx] / majority_class_count
+
+        # TODO: Implement the membership base and decay functions
         sample_weight = None
 
-        self._SVC_ = _SVC(
+        self.svc_ = _SVC(
             C=self.C,
             kernel=self.kernel,
             degree=self.degree,
@@ -299,6 +313,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
             probability=self.probability,
             tol=self.tol,
             cache_size=self.cache_size,
+            class_weight=class_ratios if self.balanced else None,
             verbose=self.verbose,
             max_iter=self.max_iter,
             decision_function_shape=self.decision_function_shape,
@@ -306,24 +321,24 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
             random_state=self.random_state,
         ).fit(X, y, sample_weight=sample_weight)
 
-        self.class_weight_ = self._SVC_.class_weight_
-        self.classes_ = self._SVC_.classes_
-        self.dual_coef_ = self._SVC_.dual_coef_
-        self.fit_status_ = self._SVC_.fit_status_
-        self.intercept_ = self._SVC_.intercept_
-        self.n_features_in_ = self._SVC_.n_features_in_
-        self.n_iter_ = self._SVC_.n_iter_
-        self.support_ = self._SVC_.support_
-        self.support_vectors_ = self._SVC_.support_vectors_
-        self.n_support_ = self._SVC_.n_support_
-        self.probA_ = self._SVC_.probA_
-        self.probB_ = self._SVC_.probB_
-        self.shape_fit_ = self._SVC_.shape_fit_
+        self.class_weight_ = self.svc_.class_weight_
+        self.classes_ = self.svc_.classes_
+        self.dual_coef_ = self.svc_.dual_coef_
+        self.fit_status_ = self.svc_.fit_status_
+        self.intercept_ = self.svc_.intercept_
+        self.n_features_in_ = self.svc_.n_features_in_
+        self.n_iter_ = self.svc_.n_iter_
+        self.support_ = self.svc_.support_
+        self.support_vectors_ = self.svc_.support_vectors_
+        self.n_support_ = self.svc_.n_support_
+        self.probA_ = self.svc_.probA_
+        self.probB_ = self.svc_.probB_
+        self.shape_fit_ = self.svc_.shape_fit_
 
-        if hasattr(self._SVC_, "feature_names_in_"):
-            self.feature_names_in_ = self._SVC_.feature_names_in_
-        if hasattr(self._SVC_, "coef_"):
-            self.coef_ = self._SVC_.coef_
+        if hasattr(self.svc_, "feature_names_in_"):
+            self.feature_names_in_ = self.svc_.feature_names_in_
+        if hasattr(self.svc_, "coef_"):
+            self.coef_ = self.svc_.coef_
 
         return self
 
@@ -343,4 +358,4 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
 
         X = self._validate_data(X, reset=False)
 
-        return self._SVC_.predict(X)
+        return self.svc_.predict(X)
