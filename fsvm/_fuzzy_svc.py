@@ -59,9 +59,9 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         This parameter is only used when `membership_decay='exponential'`.
 
     balanced : bool, default=True
-        Set the parameter C of class i to r_i*C for FuzzySVC. If `True`, the
-        membership of each sample will be scaled by the number r_i expressing
-        its ratio to the number of samples of the majority class as in [1]_.
+        Whether to use the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        ``n_samples / (n_classes * np.bincount(y))``.
 
     C : float, default=1.0
         Regularization parameter. The strength of the regularization is
@@ -327,8 +327,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         self.y_ = y
 
         y_ = column_or_1d(y, warn=True)
-        classes, y_, counts = np.unique(y, return_inverse=True, return_counts=True)
-        class_imbalance = self.__calculate_class_imbalance(y, classes, counts)
+        classes, y_ = np.unique(y_, return_inverse=True)
 
         svc_args = {
             "C": self.C,
@@ -340,7 +339,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
             "probability": self.probability,
             "tol": self.tol,
             "cache_size": self.cache_size,
-            "class_weight": class_imbalance,
+            "class_weight": "balanced" if self.balanced else None,
             "verbose": self.verbose,
             "max_iter": self.max_iter,
             "decision_function_shape": self.decision_function_shape,
@@ -414,20 +413,6 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         X = self._validate_data(X, reset=False)
 
         return self.svc_.predict(X)
-
-    def __calculate_class_imbalance(self, y, classes, counts):
-        class_imbalance = None
-
-        if self.balanced:
-            class_imbalance = {}
-            majority_class_count = np.amax(counts)
-
-            for class_label in set(y):
-                idx = np.where(classes == class_label)[0][0]
-
-                class_imbalance[class_label] = counts[idx] / majority_class_count
-
-        return class_imbalance
 
     def __calculate_membership_degree(self):
         if self.membership_decay == "exponential":
