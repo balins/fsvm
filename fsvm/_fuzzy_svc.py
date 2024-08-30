@@ -349,7 +349,9 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         }
 
         if self.distance_metric == "centroid":
-            centroids = _NearestCentroid().fit(X, y).centroids_
+            centroids = (
+                _NearestCentroid(metric=self.centroid_metric).fit(X, y).centroids_
+            )
             self.distance_ = np.linalg.norm(X - centroids[y_], axis=1)
         elif self.distance_metric == "hyperplane":
             hyperplane_svc_args = {**svc_args, "decision_function_shape": "ovr"}
