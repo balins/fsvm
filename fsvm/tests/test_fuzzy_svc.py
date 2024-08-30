@@ -30,7 +30,7 @@ def test_smoke_test(data):
 
     # Check the default values
     assert clf.distance_metric == "centroid"
-    assert clf.membership_decay == "exponential"
+    assert clf.membership_decay == "linear"
     assert clf.beta == 0.1
     assert clf.balanced is True
 

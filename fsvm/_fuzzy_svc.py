@@ -38,9 +38,8 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         with larger values of `distance_metric` values will be lower.
 
     centroid_metric : {'euclidean', 'manhattan'}, default='euclidean'          \
-        Metric to use for the computation of distance between the sample
-        and the centroid of its class. This parameter is only used when
-        `distance_metric='centroid'`.
+        Metric to use for the computation of centroids of each class.
+        This parameter is only used when `distance_metric='centroid'`.
 
         If `centroid_metric='euclidean'`, the centroid for the samples
         corresponding to each class is the arithmetic mean, which minimizes
@@ -49,14 +48,15 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         median, which minimizes the sum of L1 distances.
 
     membership_decay : {'exponential', 'linear'} or callable,                  \
-        default='exponential'
+        default='linear'
         Method to compute the decay function for membership as in [1]_.
         If a callable is passed, it should take the output of `distance_metric`
         method and return the final membership degree in the interval [0, 1].
 
-    beta : float, default=0.5
+    beta : float, default=0.1
         Parameter for the exponential decay function, determining the steepness
         of the decay as in [1]._ Should be in the interval [0, 1].
+        This parameter is only used when `membership_decay='exponential'`.
 
     balanced : bool, default=True
         Set the parameter C of class i to r_i*C for FuzzySVC. If `True`, the
@@ -229,7 +229,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
            0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2,
-           2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2,
+           2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2,
            2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
     """
 
@@ -253,7 +253,7 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         *,
         distance_metric="centroid",
         centroid_metric="euclidean",
-        membership_decay="exponential",
+        membership_decay="linear",
         beta=0.1,
         balanced=True,
         C=1.0,
