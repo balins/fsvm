@@ -11,6 +11,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "scikit-learn>=1.4.2",
+  "numpy>=2.1",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -40,6 +41,7 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 [tool.pixi.dependencies]
 python = ">=3.9"
 scikit-learn = ">=1.4.2"
+numpy = ">=2.1"
 
 [tool.pixi.pypi-dependencies]
 fsvm = { path=".", editable=true }
@@ -79,6 +81,7 @@ clean-doc = { cmd = "rm -rf _build", cwd = "doc" }
 
 [tool.pixi.feature.jupyter.dependencies]
 ipykernel = ">=6.29.5,<7"
+pandas = ">=2.2.2,<3"
 
 [tool.pixi.environments]
 doc = ["doc"]
