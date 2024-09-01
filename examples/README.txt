@@ -3,4 +3,4 @@
 Example Gallery
 ===============
 
-Introductory examples.
+Examples of FSVM usage.

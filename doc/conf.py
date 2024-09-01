@@ -10,9 +10,9 @@ import sys
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 from importlib.metadata import version as get_version
 
-project = "Scikit-learn Project Template"
-copyright = "2016, V. Birodkar"
-author = "V. Birodkar"
+project = "fsvm"
+copyright = "2024, J. Baliński"
+author = "J. Baliński"
 release = get_version("fsvm")
 version = ".".join(release.split(".")[:3])
 
@@ -51,24 +51,22 @@ html_css_files = [
     "css/fsvm.css",
 ]
 html_sidebars = {
-    "quick_start": [],
-    "user_guide": [],
+    "api": [],
     "auto_examples/index": [],
 }
 
 html_theme_options = {
     "external_links": [],
     "github_url": "https://github.com/balins/fsvm",
-    # "twitter_url": "https://twitter.com/pandas_dev",
     "use_edit_page_button": True,
     "show_toc_level": 1,
     # "navbar_align": "right",  # For testing that the navbar items align properly
 }
 
 html_context = {
-    "github_user": "scikit-learn-contrib",
-    "github_repo": "project-template",
-    "github_version": "master",
+    "github_user": "balins",
+    "github_repo": "fsvm",
+    "github_version": "main",
     "doc_path": "doc",
 }
 

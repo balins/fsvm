@@ -1,6 +1,6 @@
 """
 ============================
-Plotting Template Classifier
+Plotting FSVM Classifier
 ============================
 
 An example plot of :class:`fsvm.FuzzySVC`

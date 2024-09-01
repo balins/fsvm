@@ -397,11 +397,14 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         return self
 
     def predict(self, X):
-        """A reference implementation of a prediction for a classifier.
+        """
+        A reference implementation of a prediction for a classifier.
+
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
             The input samples.
+
         Returns
         -------
         y : ndarray, shape (n_samples,)
