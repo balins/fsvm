@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Plotting Template Classifier &#8212; Scikit-learn Project Template 0.1.0 documentation</title>
+    <title>Plotting FSVM Classifier &#8212; fsvm 0.1.0 documentation</title>
   
   
   
@@ -129,8 +129,8 @@
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="Scikit-learn Project Template 0.1.0 documentation - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Scikit-learn Project Template 0.1.0 documentation - Home"/>`);</script>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="fsvm 0.1.0 documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="fsvm 0.1.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -145,20 +145,6 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../quick_start.html">
-    Getting started
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../user_guide.html">
-    User Guide
-  </a>
-</li>
-
-
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API Reference
@@ -273,20 +259,6 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../quick_start.html">
-    Getting started
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../user_guide.html">
-    User Guide
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API Reference
   </a>
@@ -347,7 +319,7 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Plotting Template Classifier</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Plotting FSVM Classifier</a></li>
 </ul>
 </div>
 </nav></div>
@@ -410,15 +382,15 @@ document.write(`
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-classifier-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="plotting-template-classifier">
-<span id="sphx-glr-auto-examples-plot-classifier-py"></span><h1>Plotting Template Classifier<a class="headerlink" href="#plotting-template-classifier" title="Link to this heading">#</a></h1>
-<p>An example plot of <code class="xref py py-class docutils literal notranslate"><span class="pre">fsvm.FuzzySVC</span></code></p>
+<section class="sphx-glr-example-title" id="plotting-fsvm-classifier">
+<span id="sphx-glr-auto-examples-plot-classifier-py"></span><h1>Plotting FSVM Classifier<a class="headerlink" href="#plotting-fsvm-classifier" title="Link to this heading">#</a></h1>
+<p>An example plot of <a class="reference internal" href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC" title="fsvm.FuzzySVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">fsvm.FuzzySVC</span></code></a></p>
 <p>Train our classifier on very simple dataset</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fsvm</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.ClassifierMixin.html#sklearn.base.ClassifierMixin" title="sklearn.base.ClassifierMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">FuzzySVC</span></a>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fsvm</span> <span class="kn">import</span> <a href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC" title="fsvm.FuzzySVC" class="sphx-glr-backref-module-fsvm sphx-glr-backref-type-py-class"><span class="n">FuzzySVC</span></a>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">clf</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.ClassifierMixin.html#sklearn.base.ClassifierMixin" title="sklearn.base.ClassifierMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">FuzzySVC</span></a><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
+<a href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC" title="fsvm.FuzzySVC" class="sphx-glr-backref-module-fsvm sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">clf</span></a> <span class="o">=</span> <a href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC" title="fsvm.FuzzySVC" class="sphx-glr-backref-module-fsvm sphx-glr-backref-type-py-class"><span class="n">FuzzySVC</span></a><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a test dataset</p>
@@ -431,11 +403,11 @@ to download the full example code.</p>
 <p>Use scikit-learn to display the decision boundary</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.inspection</span> <span class="kn">import</span> <span class="n">DecisionBoundaryDisplay</span>
 
-<a href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.DecisionBoundaryDisplay.html#sklearn.inspection.DecisionBoundaryDisplay" title="sklearn.inspection._plot.decision_boundary.DecisionBoundaryDisplay" class="sphx-glr-backref-module-sklearn-inspection-_plot-decision_boundary sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">disp</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.DecisionBoundaryDisplay.html#sklearn.inspection.DecisionBoundaryDisplay.from_estimator" title="sklearn.inspection.DecisionBoundaryDisplay.from_estimator" class="sphx-glr-backref-module-sklearn-inspection sphx-glr-backref-type-py-method"><span class="n">DecisionBoundaryDisplay</span><span class="o">.</span><span class="n">from_estimator</span></a><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">)</span>
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.DecisionBoundaryDisplay.html#sklearn.inspection.DecisionBoundaryDisplay" title="sklearn.inspection._plot.decision_boundary.DecisionBoundaryDisplay" class="sphx-glr-backref-module-sklearn-inspection-_plot-decision_boundary sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">disp</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.DecisionBoundaryDisplay.html#sklearn.inspection.DecisionBoundaryDisplay.from_estimator" title="sklearn.inspection.DecisionBoundaryDisplay.from_estimator" class="sphx-glr-backref-module-sklearn-inspection sphx-glr-backref-type-py-method"><span class="n">DecisionBoundaryDisplay</span><span class="o">.</span><span class="n">from_estimator</span></a><span class="p">(</span><a href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC" title="fsvm.FuzzySVC" class="sphx-glr-backref-module-fsvm sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">clf</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">(</span>
     <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
     <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="n">c</span><span class="o">=</span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">),</span>
+    <span class="n">c</span><span class="o">=</span><a href="../generated/fsvm.FuzzySVC.html#fsvm.FuzzySVC.predict" title="fsvm.FuzzySVC.predict" class="sphx-glr-backref-module-fsvm sphx-glr-backref-type-py-method"><span class="n">clf</span><span class="o">.</span><span class="n">predict</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_test</span></a><span class="p">),</span>
     <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
     <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -450,7 +422,7 @@ to download the full example code.</p>
 <img src="../_images/sphx_glr_plot_classifier_001.png" srcset="../_images/sphx_glr_plot_classifier_001.png" alt="FSVM Classifier Decision Boundary" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[Text(0.5, 23.52222222222222, &#39;Feature 1&#39;), Text(30.972222222222214, 0.5, &#39;Feature 2&#39;), Text(0.5, 1.0, &#39;FSVM Classifier Decision Boundary&#39;)]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.301 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.182 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-classifier-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fed3e85cac62fc93e088aa8cb008d467/plot_classifier.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_classifier.ipynb</span></code></a></p>
@@ -498,7 +470,7 @@ to download the full example code.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/scikit-learn-contrib/project-template/edit/master/doc/auto_examples/plot_classifier.rst">
+    <a href="https://github.com/balins/fsvm/edit/main/doc/auto_examples/plot_classifier.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -544,7 +516,7 @@ to download the full example code.</p>
 
   <p class="copyright">
     
-      © Copyright 2016, V. Birodkar.
+      © Copyright 2024, J. Baliński.
       <br/>
     
   </p>

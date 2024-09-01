@@ -5,7 +5,7 @@
 Example Gallery
 ===============
 
-Introductory examples.
+Examples of FSVM usage.
 
 
 
@@ -28,7 +28,7 @@ Introductory examples.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Plotting Template Classifier</div>
+      <div class="sphx-glr-thumbnail-title">Plotting FSVM Classifier</div>
     </div>
 
 

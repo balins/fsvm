@@ -1,0 +1,44 @@
+﻿FuzzySVC
+===========================
+
+.. currentmodule:: fsvm
+
+.. autoclass:: FuzzySVC
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      
+      
+        ~FuzzySVC.fit
+      
+      
+        ~FuzzySVC.get_metadata_routing
+      
+      
+        ~FuzzySVC.get_params
+      
+      
+        ~FuzzySVC.predict
+      
+      
+        ~FuzzySVC.score
+      
+      
+        ~FuzzySVC.set_params
+      
+      
+        ~FuzzySVC.set_score_request
+      
+   
+   
+
+.. include:: fsvm.FuzzySVC.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>
