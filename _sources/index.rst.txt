@@ -9,7 +9,7 @@
 Fuzzy Support Vector Machine (FSVM)
 #############################################
 
-**Date**: 31.08.2024 **Version**: 0.1.0
+**Date**: 11.09.2024 **Version**: 0.2.0
 
 **Useful links**:
 `Source Repository <https://github.com/balins/fsvm>`__ |
