@@ -11,6 +11,7 @@ from sklearn.neighbors import (
 )
 from sklearn.svm import SVC as _SVC
 from sklearn.utils._param_validation import Interval, StrOptions
+from sklearn.utils.metaestimators import available_if
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import column_or_1d
 
@@ -416,6 +417,72 @@ class FuzzySVC(ClassifierMixin, BaseEstimator):
         X = self._validate_data(X, reset=False)
 
         return self.svc_.predict(X)
+
+    def _check_proba(self):
+        if not self.probability:
+            raise AttributeError(
+                "predict_proba is not available when probability=False"
+            )
+        return True
+
+    @available_if(_check_proba)
+    def predict_proba(self, X):
+        """Compute probabilities of possible outcomes for samples in X.
+
+        The model needs to have probability information computed at training
+        time: fit with attribute `probability` set to True.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            For kernel="precomputed", the expected shape of X is
+            (n_samples_test, n_samples_train).
+
+        Returns
+        -------
+        T : ndarray of shape (n_samples, n_classes)
+            Returns the probability of the sample for each class in
+            the model. The columns correspond to the classes in sorted
+            order, as they appear in the attribute :term:`classes_`.
+
+        Notes
+        -----
+        The probability model is created using cross validation, so
+        the results can be slightly different than those obtained by
+        predict. Also, it will produce meaningless results on very small
+        datasets.
+        """
+        return self.svc_.predict_proba(X)
+
+    @available_if(_check_proba)
+    def predict_log_proba(self, X):
+        """Compute log probabilities of possible outcomes for samples in X.
+
+        The model need to have probability information computed at training
+        time: fit with attribute `probability` set to True.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features) or \
+                (n_samples_test, n_samples_train)
+            For kernel="precomputed", the expected shape of X is
+            (n_samples_test, n_samples_train).
+
+        Returns
+        -------
+        T : ndarray of shape (n_samples, n_classes)
+            Returns the log-probabilities of the sample for each class in
+            the model. The columns correspond to the classes in sorted
+            order, as they appear in the attribute :term:`classes_`.
+
+        Notes
+        -----
+        The probability model is created using cross validation, so
+        the results can be slightly different than those obtained by
+        predict. Also, it will produce meaningless results on very small
+        datasets.
+        """
+        return self.svc_.predict_log_proba(X)
 
     def __calculate_membership_degree(self):
         if self.membership_decay == "exponential":
