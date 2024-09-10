@@ -3831,9 +3831,9 @@ packages:
   timestamp: 1694616398888
 - kind: pypi
   name: fsvm
-  version: 0.1.0
+  version: 0.2.0
   path: .
-  sha256: f2aa5c11ca71c07aba0baefaacce1f9b0172c61aa3458c2108beaeb6a046489a
+  sha256: f3419faf2380824061269644411fba89934e0a534b6de3ff082bc33d4b574e19
   requires_dist:
   - scikit-learn>=1.4.2
   - numpy>=2.1

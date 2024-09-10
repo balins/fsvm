@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fsvm"
-version = "0.1.0"
+version = "0.2.0"
 authors = [{ name="Jakub Baliński" }]
 description = "A scikit-learn compatible Fuzzy Support Vector Machine implementation."
 readme = "README.md"
