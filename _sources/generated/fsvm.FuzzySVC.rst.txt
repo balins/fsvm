@@ -26,6 +26,12 @@
         ~FuzzySVC.predict
       
       
+        ~FuzzySVC.predict_log_proba
+      
+      
+        ~FuzzySVC.predict_proba
+      
+      
         ~FuzzySVC.score
       
       

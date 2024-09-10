@@ -591,6 +591,12 @@ Machines and Comparisons to Regularized Likelihood Methods”</a></p>
 <tr class="row-even"><td><p><a class="reference internal" href="#fsvm.FuzzySVC.predict" title="fsvm.FuzzySVC.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
 <td><p>A reference implementation of a prediction for a classifier.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fsvm.FuzzySVC.predict_log_proba" title="fsvm.FuzzySVC.predict_log_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_log_proba</span></code></a>(X)</p></td>
+<td><p>Compute log probabilities of possible outcomes for samples in X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fsvm.FuzzySVC.predict_proba" title="fsvm.FuzzySVC.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a>(X)</p></td>
+<td><p>Compute probabilities of possible outcomes for samples in X.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fsvm.FuzzySVC.score" title="fsvm.FuzzySVC.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y[, sample_weight])</p></td>
 <td><p>Return the mean accuracy on the given test data and labels.</p></td>
 </tr>
@@ -691,6 +697,66 @@ seen during fit.</p>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fsvm.FuzzySVC.predict_log_proba">
+<span class="sig-name descname"><span class="pre">predict_log_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fsvm.FuzzySVC.predict_log_proba" title="Link to this definition">#</a></dt>
+<dd><p>Compute log probabilities of possible outcomes for samples in X.</p>
+<p>The model need to have probability information computed at training
+time: fit with attribute <code class="docutils literal notranslate"><span class="pre">probability</span></code> set to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or                 (n_samples_test, n_samples_train)</span></dt><dd><p>For kernel=”precomputed”, the expected shape of X is
+(n_samples_test, n_samples_train).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>T</strong><span class="classifier">ndarray of shape (n_samples, n_classes)</span></dt><dd><p>Returns the log-probabilities of the sample for each class in
+the model. The columns correspond to the classes in sorted
+order, as they appear in the attribute <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-classes_" title="(in scikit-learn v1.5)"><span class="xref std std-term">classes_</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The probability model is created using cross validation, so
+the results can be slightly different than those obtained by
+predict. Also, it will produce meaningless results on very small
+datasets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fsvm.FuzzySVC.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fsvm.FuzzySVC.predict_proba" title="Link to this definition">#</a></dt>
+<dd><p>Compute probabilities of possible outcomes for samples in X.</p>
+<p>The model needs to have probability information computed at training
+time: fit with attribute <code class="docutils literal notranslate"><span class="pre">probability</span></code> set to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>For kernel=”precomputed”, the expected shape of X is
+(n_samples_test, n_samples_train).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>T</strong><span class="classifier">ndarray of shape (n_samples, n_classes)</span></dt><dd><p>Returns the probability of the sample for each class in
+the model. The columns correspond to the classes in sorted
+order, as they appear in the attribute <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-classes_" title="(in scikit-learn v1.5)"><span class="xref std std-term">classes_</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The probability model is created using cross validation, so
+the results can be slightly different than those obtained by
+predict. Also, it will produce meaningless results on very small
+datasets.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -848,6 +914,8 @@ sub-estimator of a meta-estimator, e.g. used inside a
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.get_metadata_routing()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.get_params"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.get_params()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.predict"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.predict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.predict_log_proba"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.predict_log_proba()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.predict_proba"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.predict_proba()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.score"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.score()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.set_params"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.set_params()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsvm.FuzzySVC.set_score_request"><code class="docutils literal notranslate"><span class="pre">FuzzySVC.set_score_request()</span></code></a></li>
